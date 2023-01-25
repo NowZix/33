@@ -5,7 +5,7 @@ options:
 	
 	Arg1NotSetL1: &8&m-------------------------
 	Arg1NotSetL2: &f
-	Arg1NotSetL3: &8[&cLogs&f・&cNowZix&8] &6➡
+	Arg1NotSetL3: &8[&cLogs&f・&cServer&8] &6➡
 	Arg1NotSetL4: &f➜ &b/logs reload &f» &7Recharge le script complet.
 	Arg1NotSetL5: &f➜ &b/logs check &f» &7Verifie / Installe la dernière version du skript.
 	Arg1NotSetL6: &f➜ &b/logs reset &f» &7Supprime le fichier des logs. 
@@ -36,15 +36,16 @@ options:
 	PlayerLogs_Gamemode: "%hour%:%minute% | [GAMEMODE] %player's gamemode%"
  
 on script load:
-	create file "plugins/Logs/config.yml"
-	
-	if folder "plugins/Logs/Players/<none>" exists:
-		delete folder "plugins/Logs/Players/<none>"
+	if file "plugins/Logs/config.yml" doesn't exists: 
+		create file "plugins/Logs/config.yml"
+		
+		if folder "plugins/Logs/Players/<none>" exists:
+			delete folder "plugins/Logs/Players/<none>"
 
-	wf "## Configuration Skript Logs" to "plugins/Logs/config.yml"
+		wf "## Configuration Skript Logs" to "plugins/Logs/config.yml"
 
-	set "Update.Version" to "1.0" in yaml file "plugins/Logs/config.yml"
-	set "Update.Update" to "true" in yaml file "plugins/Logs/config.yml"
+		set "Update.Version" to "1.0" in yaml file "plugins/Logs/config.yml"
+		set "Update.Update" to "true" in yaml file "plugins/Logs/config.yml"
 	if folder "plugins/Logs" doesn't exists: 
 		create folder "plugins/Logs"
 	if file "plugins/Logs/Command.log" doesn't exists: 
@@ -133,6 +134,7 @@ command /logs [<text>]:
 
 					send "&f" to player
 				else:
+					send "{@prefix} &cMise à jour disponible ! &f(&aVersion &b➜ &6%{_ver}%&f)" to player
 					send "{@prefix} &cLe système de mise à jour est désactivé."
 			else:
 				send "&f"
@@ -215,3 +217,4 @@ on gamemode change:
 	wf {@GlobalLogs_Gamemode} to "plugins/Logs/Server/%now%.log"
 	wf {@PlayerLogs_Gamemode} to "plugins/Logs/Players/%player%/%now%.log"
 
+COUCOU
