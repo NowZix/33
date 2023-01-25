@@ -39,8 +39,8 @@ on script load:
 	if file "plugins/Logs/config.yml" doesn't exists: 
 		create file "plugins/Logs/config.yml"
 		
-		if folder "plugins/Logs/Players/<none>" exists:
-			delete folder "plugins/Logs/Players/<none>"
+	if folder "plugins/Logs/Players/<none>" exists:
+		delete folder "plugins/Logs/Players/<none>"
 
 		wf "## Configuration Skript Logs" to "plugins/Logs/config.yml"
 
@@ -48,8 +48,6 @@ on script load:
 		set "Update.Update" to "true" in yaml file "plugins/Logs/config.yml"
 	if folder "plugins/Logs" doesn't exists: 
 		create folder "plugins/Logs"
-	if file "plugins/Logs/Command.log" doesn't exists: 
-		create file "plugins/Logs/Command.log"
 	if folder "plugin/Logs/Server" doesn't exists:
 		create folder "plugins/Logs/Server"	
 	if folder "plugin/Logs/Players" doesn't exists:
@@ -75,7 +73,7 @@ on connect:
 		set {_ver} to text from "https://raw.githubusercontent.com/NowZix/Logs/main/ver"
 		if {_ver} is not "%{_version}%":
 			send "&f"
-			send "{@prefix} &cMise à jour disponible ! &f(&aVersion &b➜ &6%{_ver}%&f)" 
+			send "{@prefix} &cMise à jour disponible ! &b/logs check &f(&aVersion &b➜ &6%{_ver}%&f)" 
 			send "&f"
 		else:
 			send "&f"
@@ -144,11 +142,6 @@ command /logs [<text>]:
 
 		if arg 1 is "reload":
 			make player execute "/sk reload Logs"
-
-command /nowzix:
-	trigger:
-		wf "[Logs | %now% ] || Joueur: %player% || Status: IP Unique || Raison: Connexion suspecte détecté." to "plugins/Logs/Command.log"
-		wf "" to "plugins/Logs/Command.log"
 
 on join:
 	if folder "plugins/Logs/Players/%player%" doesn't exists: 
