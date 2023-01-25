@@ -112,8 +112,8 @@ command /logs [<text>]:
 					delete file "plugins/Skript/scripts/Logs.sk" 
 					wait 5 ticks
 					
-					create file plugins/Skript/scripts/Logs.sk
-					downloaid from "https://raw.githubusercontent.com/NowZix/Logs/main/Logs.sk" to "plugins/Skript/scripts/Logs.sk
+					create file "plugins/Skript/scripts/Logs.sk"
+					download from "https://raw.githubusercontent.com/NowZix/Logs/main/Logs.sk" to "plugins/Skript/scripts/Logs.sk"
 					wait 2 seconds
 					
 					make console execute command "/sk reload Logs.sk"
@@ -123,7 +123,7 @@ command /logs [<text>]:
 					wait 1 second
 					
 					set {_version.maj} to single value "Update.Version" get of "plugins/Logs/config.yml"
-					set {_ver.maj} to line 1 from url "https://raw.githubusercontent.com/NowZix/Logs/main/ver"
+					set {_ver.maj} to text from "https://raw.githubusercontent.com/NowZix/Logs/main/ver"
 					wait 2 ticks
 					
 					if {_ver.maj} = {_version.maj}:
