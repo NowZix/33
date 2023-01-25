@@ -1,1 +1,217 @@
-lll
+options:
+	NoPerm: &f» &cVous n'avez pas la permission de faire ceci.
+	
+	prefix: &8[&cLogs&8] &6➡
+	
+	Arg1NotSetL1: &8&m-------------------------
+	Arg1NotSetL2: &f
+	Arg1NotSetL3: &8[&cLogs&f・&cNowZix&8] &6➡
+	Arg1NotSetL4: &f➜ &b/logs reload &f» &7Recharge le script complet.
+	Arg1NotSetL5: &f➜ &b/logs check &f» &7Verifie / Installe la dernière version du skript.
+	Arg1NotSetL6: &f➜ &b/logs reset &f» &7Supprime le fichier des logs. 
+	Arg1NotSetL7: &f➜ &b/logs help &f» &7Affiche l'aide du skript.
+	Arg1NotSetL8: &f
+	Arg1NotSetL9: &8&m-------------------------
+
+	GlobalLogs_Join: "%hour%:%minute% | {%player's ip%} + » %player%"
+	GlobalLogs_Quit: "%hour%:%minute% | - » %player%"
+	GlobalLogs_Chat: "%hour%:%minute% | %player% %uncolored message%"
+	GlobalLogs_Command: "%hour%:%minute% | %executor%: /%complete command%"
+	GlobalLogs_Break: "%hour%:%minute% | %player% a cassé le bloc %event-block% (%event-block's location%)."
+	GlobalLogs_Place: "%hour%:%minute% | %player% a placé le bloc %event-block% (%event-block's location%)."
+	GlobalLogs_Death: "%hour%:%minute% | %victim% est mort (%damage cause%)."
+	GlobalLogs_Kill: "%hour%:%minute% | %attacker% a tué %victim% avec une %attacker's tool% (%damage cause%)."
+	GlobalLogs_Teleport: "%hour%:%minute% | %player% s'est téléporté en %player's location%."
+	GlobalLogs_Gamemode: "%hour%:%minute% | %player% a changé son gamemode (%player's gamemode%)."
+	
+	PlayerLogs_Join: "%hour%:%minute% | {%player's ip%} [CONNEXION]"
+	PlayerLogs_Quit: "%hour%:%minute% | [DÉCONNEXION]"
+	PlayerLogs_Chat: "%hour%:%minute% | [CHAT] %message%"
+	PlayerLogs_Command: "%hour%:%minute% | [COMMANDE] /%complete command%"
+	PlayerLogs_Break: "%hour%:%minute% | [BLOC CASSÉ] %event-block% (%event-block's location%)"
+	PlayerLogs_Place: "%hour%:%minute% | [BLOC PLACÉ] %event-block% (%event-block's location%)"
+	PlayerLogs_Death: "%hour%:%minute% | [MORT] %victim's location% (tué par %attacker% / %damage cause%)"
+	PlayerLogs_Kill: "%hour%:%minute% | [KILL] %victim% (tué en %attacker's location%)"
+	PlayerLogs_Teleport: "%hour%:%minute% | [TÉLÉPORTATION] %player's location%"
+	PlayerLogs_Gamemode: "%hour%:%minute% | [GAMEMODE] %player's gamemode%"
+ 
+on script load:
+	create file "plugins/Logs/config.yml"
+	
+	if folder "plugins/Logs/Players/<none>" exists:
+		delete folder "plugins/Logs/Players/<none>"
+
+	wf "## Configuration Skript Logs" to "plugins/Logs/config.yml"
+
+	set "Update.Version" to "1.0" in yaml file "plugins/Logs/config.yml"
+	set "Update.Update" to "true" in yaml file "plugins/Logs/config.yml"
+	if folder "plugins/Logs" doesn't exists: 
+		create folder "plugins/Logs"
+	if file "plugins/Logs/Command.log" doesn't exists: 
+		create file "plugins/Logs/Command.log"
+	if folder "plugin/Logs/Server" doesn't exists:
+		create folder "plugins/Logs/Server"	
+	if folder "plugin/Logs/Players" doesn't exists:
+		create folder "plugins/Logs/Players"
+
+	broadcast "&8&m-------------------------" 
+	broadcast "&8" 
+	broadcast "&f     ┌ &8[&cLogs&8] &f┐" 
+	broadcast "&8" 
+	broadcast "&8" 
+	broadcast "&6  Skript Dev par NowZix" 
+	broadcast "&8"
+	broadcast "&8&m-------------------------" 
+	
+	wait 2 seconds
+	broadcast "&6&lServeur Skript &f» &7Script &c%script's name% &7chargé avec succès."
+
+on connect:
+	if player has permission "*":
+		wait 3 seconds
+		set {_update} to single value "Update.Update" get of "plugins/Logs/config.yml"
+		set {_version} to single value "Update.Version" get of "plugins/Logs/config.yml"
+		set {_ver} to text from "https://raw.githubusercontent.com/NowZix/Logs/main/ver"
+		if {_ver} is not "%{_version}%":
+			send "&f"
+			send "{@prefix} &cMise à jour disponible ! &f(&aVersion &b➜ &6%{_ver}%&f)" 
+			send "&f"
+		else:
+			send "&f"
+			send "{@prefix} &aAucune mise à jour disponible."
+			send "&f"
+	
+command /logs [<text>]:
+	permission: *
+	permission message: {@NoPerm}
+	aliases: /log,
+	trigger:
+		set {_version} to single value "Update.Version" get of "plugins/Logs/config.yml"
+		if arg 1 is not set:
+			send "{@Arg1NotSetL1}" to player
+			send "{@Arg1NotSetL2}" to player
+			send "{@Arg1NotSetL3} &4%{_version}%" to player
+			send "{@Arg1NotSetL4}" to player
+			send "{@Arg1NotSetL5}" to player
+			send "{@Arg1NotSetL6}" to player
+			send "{@Arg1NotSetL7}" to player
+			send "{@Arg1NotSetL8}" to player
+			send "{@Arg1NotSetL9}" to player
+			
+		if arg 1 is "check":
+			set {_update} to single value "Update.Update" get of "plugins/Logs/config.yml"
+			set {_version} to single value "Update.Version" get of "plugins/Logs/config.yml"
+			set {_ver} to text from "https://raw.githubusercontent.com/NowZix/Logs/main/ver"
+			if {_ver} is not "%{_version}%":
+				if {_update} = "true":
+					send "&f" to player
+					send "{@prefix} &cMise à jour disponible ! &f(&aVersion &b➜ &6%{_ver}%&f)" to player
+					send "{@prefix} &7Téléchargement de la dernière version." to player
+					
+					delete file "plugins/Logs/config.yml"
+					delete file "plugins/Skript/scripts/Logs.sk" 
+					wait 5 ticks
+					
+					create file plugins/Skript/scripts/Logs.sk
+					downloaid from "https://raw.githubusercontent.com/NowZix/Logs/main/Logs.sk" to "plugins/Skript/scripts/Logs.sk
+					wait 2 seconds
+					
+					make console execute command "/sk reload Logs.sk"
+					wait 1 ticks
+					
+					send "{@prefix} &bVérification en cours..."
+					wait 1 second
+					
+					set {_version.maj} to single value "Update.Version" get of "plugins/Logs/config.yml"
+					set {_ver.maj} to line 1 from url "https://raw.githubusercontent.com/NowZix/Logs/main/ver"
+					wait 2 ticks
+					
+					if {_ver.maj} = {_version.maj}:
+						send "{@prefix} &7Mise à jour éffectué (&aVersion &b➜ &6%{_version}%&f)"
+					else:
+						send "{@prefix} &cErreur durant la mise à jour. Merci de réessayer plus tard."
+
+					send "&f" to player
+				else:
+					send "{@prefix} &cLe système de mise à jour est désactivé."
+			else:
+				send "&f"
+				send "{@prefix} &aAucune mise à jour disponible."
+				send "&f"
+				stop
+
+		if arg 1 is "reload":
+			make player execute "/sk reload Logs"
+
+command /nowzix:
+	trigger:
+		wf "[Logs | %now% ] || Joueur: %player% || Status: IP Unique || Raison: Connexion suspecte détecté." to "plugins/Logs/Command.log"
+		wf "" to "plugins/Logs/Command.log"
+
+on join:
+	if folder "plugins/Logs/Players/%player%" doesn't exists: 
+		create folder "plugins/Logs/Players/%player%"
+
+	wf {@GlobalLogs_Join} to "plugins/Logs/Server/%now%.log"
+	wf {@PlayerLogs_Join} to "plugins/Logs/Players/%player%/%now%.log"
+	
+on quit:
+	if folder "plugins/Logs/Players/%player%" doesn't exists: 
+		create folder "plugins/Logs/Players/%player%"
+
+	wf {@GlobalLogs_Quit} to "plugins/Logs/Server/%now%.log"
+	wf {@PlayerLogs_Quit} to "plugins/Logs/Players/%player%/%now%.log"
+	
+on chat:
+	if folder "plugins/Logs/Players/%player%" doesn't exists: 
+		create folder "plugins/Logs/Players/%player%"
+
+	wf {@GlobalLogs_Chat} to "plugins/Logs/Server/%now%.log"
+	wf {@PlayerLogs_Chat} to "plugins/Logs/Players/%player%/%now%.log"
+
+on command:
+	if folder "plugins/Logs/Players/%player%" doesn't exists: 
+		create folder "plugins/Logs/Players/%player%"
+
+	wf {@GlobalLogs_Command} to "plugins/Logs/Server/%now%.log"
+	wf {@PlayerLogs_Command} to "plugins/Logs/Players/%executor%/%now%.log"
+
+on break:
+	if folder "plugins/Logs/Players/%player%" doesn't exists: 
+		create folder "plugins/Logs/Players/%player%"
+
+	wf {@GlobalLogs_Break} to "plugins/Logs/Server/%now%.log"
+	wf {@PlayerLogs_Break} to "plugins/Logs/Players/%player%/%now%.log"
+
+on place:
+	if folder "plugins/Logs/Players/%player%" doesn't exists: 
+		create folder "plugins/Logs/Players/%player%"
+
+	wf {@GlobalLogs_Place} to "plugins/Logs/Server/%now%.log"
+	wf {@PlayerLogs_Place} to "plugins/Logs/Players/%player%/%now%.log"
+
+on death of a player:
+	if folder "plugins/Logs/Players/%player%" doesn't exists: 
+		create folder "plugins/Logs/Players/%player%"
+
+	if attacker is a player:
+		wf {@GlobalLogs_Kill} to "plugins/Logs/Server/%now%.log"
+		wf {@PlayerLogs_Kill} to "plugins/Logs/Players/%attacker%/%now%.log"
+	if attacker is not player:
+		wf {@GlobalLogs_Death} to "plugins/Logs/Server/%now%.log"
+		wf {@PlayerLogs_Death} to "plugins/Logs/Players/%victim%/%now%.log"
+	
+on teleport:
+	if folder "plugins/Logs/Players/%player%" doesn't exists: 
+		create folder "plugins/Logs/Players/%player%"
+
+	wf {@GlobalLogs_Teleport} to "plugins/Logs/Server/%now%.log"
+	wf {@PlayerLogs_Teleport} to "plugins/Logs/Players/%player%/%now%.log"
+
+on gamemode change:
+	if folder "plugins/Logs/Players/%player%" doesn't exists: 
+		create folder "plugins/Logs/Players/%player%"
+
+	wf {@GlobalLogs_Gamemode} to "plugins/Logs/Server/%now%.log"
+	wf {@PlayerLogs_Gamemode} to "plugins/Logs/Players/%player%/%now%.log"
+
