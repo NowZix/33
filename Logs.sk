@@ -128,7 +128,7 @@ command /logs [<text>]:
 					wait 2 ticks
 					
 					if {_ver.maj} = {_version.maj}:
-						send "{@prefix} &7Mise à jour éffectué (&aVersion &b➜ &6%{_version}%&f)"
+						send "{@prefix} &7Mise à jour éffectué (&aVersion &b➜ &6%{_ver}%&7)"
 					else:
 						send "{@prefix} &cErreur durant la mise à jour. Merci de réessayer plus tard."
 
@@ -218,3 +218,4 @@ on gamemode change:
 	wf {@PlayerLogs_Gamemode} to "plugins/Logs/Players/%player%/%now%.log"
 
 COUCOU
+CC
