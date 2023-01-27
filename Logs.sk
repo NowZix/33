@@ -209,6 +209,3 @@ on gamemode change:
 
 	wf {@GlobalLogs_Gamemode} to "plugins/Logs/Server/%now%.log"
 	wf {@PlayerLogs_Gamemode} to "plugins/Logs/Players/%player%/%now%.log"
-
-
-COUCOU
