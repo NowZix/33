@@ -44,7 +44,7 @@ on script load:
 
 		wf "## Configuration Skript Logs" to "plugins/Logs/config.yml"
 		set {_ver} to text from "https://raw.githubusercontent.com/NowZix/Logs/main/ver"
-		set "Update.Version" to "%{_ver}%" in yaml file "plugins/Logs/config.yml"
+		set "Update.Version" to "2.0.1" in yaml file "plugins/Logs/config.yml"
 		set "Update.Update" to "true" in yaml file "plugins/Logs/config.yml"
 	if folder "plugins/Logs" doesn't exists: 
 		create folder "plugins/Logs"
