@@ -1,5 +1,5 @@
 options:
-	Version: 2.0.1
+	Version: 2.0
 	NoPerm: &f» &cVous n'avez pas la permission de faire ceci.
 	
 	prefix: &8[&cLogs&8] &6➡
