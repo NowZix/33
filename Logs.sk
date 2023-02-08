@@ -44,7 +44,7 @@ on script load:
 
 		wf "## Configuration Skript Logs" to "plugins/Logs/config.yml"
 
-		set "Update.Version" to "1.0" in yaml file "plugins/Logs/config.yml"
+		set "Update.Version" to "1.0.5" in yaml file "plugins/Logs/config.yml"
 		set "Update.Update" to "true" in yaml file "plugins/Logs/config.yml"
 	if folder "plugins/Logs" doesn't exists: 
 		create folder "plugins/Logs"
